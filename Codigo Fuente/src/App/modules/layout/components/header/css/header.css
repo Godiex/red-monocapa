@@ -1,0 +1,42 @@
+body {
+    margin: 0;
+}
+
+header {
+    width: 100%;
+    background-color: #212529;
+}
+
+header label {
+    display: none;
+    width: 30px;
+    height: 30px;
+    padding: 20px 20px 40px 20px;
+}
+
+header label:hover{
+    cursor:pointer;
+}
+
+.logo {
+    float: left;
+    width: 80px;
+    height: 30px;
+    margin: 10px 24px 16px 15px;
+}
+
+.logo img {
+    width: 90px;
+    height: 40px;
+}
+
+@media (max-width: 920px) {
+
+    header label {
+        display: block;
+    }
+
+    .logo{
+        display: none;
+    }
+}
