@@ -1,11 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {Button, Col, Form, Row, Input} from "antd";
 import "../register-travel.css";
 import {validateMessages} from "../../../../utils/ValidateMenssageForm";
 import { UserOutlined } from '@ant-design/icons';
-import {Link} from "react-router-dom";
-import {success} from "../../../../utils/Notification";
-import InputParameters from "../../../../models/monolayer/inputParameters";
 
 const FormConfigurationNetwork = ({inputParameters}) => {
 
