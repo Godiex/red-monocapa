@@ -5,8 +5,7 @@ import Card from "../../../../common/card/Card";
 import InputParameters from "../../../../models/monolayer/inputParameters";
 import TableFile from "./ModelTable";
 import FormConfigurationNetwork from "./FormConfigurationNetwork";
-import {Col, Form, Input, Row} from "antd";
-import {FullscreenExitOutlined, FullscreenOutlined, NumberOutlined} from "@ant-design/icons";
+import {Col, Row} from "antd";
 
 const MonolayerComponent = () => {
 
@@ -39,7 +38,7 @@ const MonolayerComponent = () => {
                         {
                             inputParameters !== undefined ?
                                 <Card
-                                    content={<FormConfigurationNetwork inputParameters={inputParameters} />}
+                                    content={<FormConfigurationNetwork inputParameters={inputParameters} monolayer={monolayer} />}
                                     title={"Configuracion de la red"}
                                 /> : <></>
                         }

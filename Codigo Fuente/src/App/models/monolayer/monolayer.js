@@ -4,8 +4,6 @@ class Monolayer {
     inputParameters = undefined;
     weightMatrix = undefined;
     thresholds = undefined;
-    min = -1;
-    max = -2;
 
     constructor(inputParameters, numberIterations, maximumErrorAllowed, learningRat) {
         this.inputParameters = inputParameters;
@@ -18,18 +16,6 @@ class Monolayer {
     initParameters() {
         this.weightMatrix = this.createArray(this.inputParameters.numberEntrys, this.inputParameters.numberDesiredOutputs);
         this.thresholds = this.createArray(this.inputParameters.numberDesiredOutputs)
-    }
-
-    generateRandomWeights() {
-        for (let i = 0; i < 2; i++) {
-            for (let j = 0; j < 2; j++) {
-                this.weightMatrix[i][j] = this.getRandomArbitrary(this.min, this.max);
-            }
-        }
-    }
-
-    getRandomArbitrary(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
     }
 
 
@@ -60,9 +46,5 @@ class Monolayer {
         }
         return arr;
     }
-
-
-
-
 
 }

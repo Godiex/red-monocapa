@@ -2,22 +2,27 @@ import React, {useEffect, useState} from "react";
 import {Button, Col, Form, Row, Input, InputNumber} from "antd";
 import "../register-travel.css";
 import {validateMessages} from "../../../../utils/ValidateMenssageForm";
+import Monolayer from "../../../../models/monolayer/monolayer";
 import {FullscreenExitOutlined, FullscreenOutlined, NumberOutlined, UserOutlined} from '@ant-design/icons';
 
-const FormConfigurationNetwork = ({inputParameters}) => {
+const FormConfigurationNetwork = ({inputParameters , monolayer}) => {
 
+    const min = -1;
+    const max = 2;
     const [form] = Form.useForm();
+    const [weights, setWeights] = useState({});
     const onReset = () => form.resetFields();
-    const [expand, setExpand] = useState(false);
 
     useEffect(() => {
         fillFields();
-        getFields();
     }, [inputParameters]);
 
     const onFinish = (values) => {
-        console.log(values);
 
+    }
+
+    const setRandomWeights = async () => {
+        const values = await form.getFieldsValue();
         fillWeights(values);
     }
 
@@ -30,23 +35,29 @@ const FormConfigurationNetwork = ({inputParameters}) => {
         });
     };
 
-
-
     const fillWeights = (value) => {
-        debugger
+
+        let a = generateRandomWeights();
         for (const property in value) {
             if(property.includes("weight")){
                 form.setFieldsValue({
-                    [property] : 1
+                    [property] : generateRandomWeights()
                 })
             }
         }
     };
 
+    const generateRandomWeights = () => {
+        return getRandomArbitrary(min, max);
+    }
+
+    const getRandomArbitrary = (min, max) =>  {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
     const getFields = () => {
         const count = inputParameters.numberEntrys * inputParameters.numberDesiredOutputs;
         const children = [];
-
         for (let i = 0; i < count; i++) {
             children.push(
                 <Col span={4} key={i}>
@@ -111,7 +122,7 @@ const FormConfigurationNetwork = ({inputParameters}) => {
                     <Col xs={24} sm={24} md={12} lg={8} xl={8}>
                         <Form.Item
                             label="Rata de aprendisaje"
-                            name="learning"
+                            name="learningRat"
                             rules={[{ required: true, type: 'number', min: -1, max: 1 }]}
                         >
                             <InputNumber  prefix={<UserOutlined />} />
@@ -140,6 +151,12 @@ const FormConfigurationNetwork = ({inputParameters}) => {
                 <h3>Configuracion de pesos</h3>
 
                 <Row gutter={24}>{inputParameters ? getFields() : <></> }</Row>
+
+                <Button
+                    onClick={setRandomWeights}
+                >
+                    Generar Pesos
+                </Button>
 
                 <Row>
                     <Form.Item >

@@ -5,7 +5,6 @@ import {validateMessages} from "../../../../utils/ValidateMenssageForm";
 import { UserOutlined } from '@ant-design/icons';
 import {Link} from "react-router-dom";
 import {success} from "../../../../utils/Notification";
-import InputParameters from "../../../../models/monolayer/inputParameters";
 
 const FormFile = ({setFileText}) => {
 
