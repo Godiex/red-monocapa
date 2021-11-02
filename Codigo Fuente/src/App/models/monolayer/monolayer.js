@@ -5,11 +5,12 @@ class Monolayer {
     weightMatrix = undefined;
     thresholds = undefined;
 
-    constructor(inputParameters, numberIterations, maximumErrorAllowed, learningRat) {
+    constructor(inputParameters, numberIterations, maximumErrorAllowed, learningRat, numberIntermediateLayers) {
         this.inputParameters = inputParameters;
         this.numberIterations = numberIterations;
         this.maximumErrorAllowed = maximumErrorAllowed;
         this.learningRat = learningRat;
+        this.numberIntermediateLayers = numberIntermediateLayers;
         this.initParameters();
     }
 

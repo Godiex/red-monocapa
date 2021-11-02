@@ -1,17 +1,21 @@
 import React, {useEffect, useState} from "react";
-import {Button, Col, Form, Row, Input, InputNumber} from "antd";
+import {Button, Col, Form, Row, Input, InputNumber, Select} from "antd";
 import "../register-travel.css";
 import {validateMessages} from "../../../../utils/ValidateMenssageForm";
 import Monolayer from "../../../../models/monolayer/monolayer";
 import {FullscreenExitOutlined, FullscreenOutlined, NumberOutlined, UserOutlined} from '@ant-design/icons';
+import {Option} from "antd/es/mentions";
 
 const FormConfigurationNetwork = ({inputParameters , monolayer}) => {
 
     const min = -1;
     const max = 2;
     const [form] = Form.useForm();
-    const [weights, setWeights] = useState({});
     const onReset = () => form.resetFields();
+    const [layerNumbers, setLayerNumbers] = useState(undefined);
+
+    const intermediaActivationFunctions = ["Sigmoide", "Gausiana", "Tangente Hiperbolica"];
+    const outputsActivationFunctions = ["Sigmoide", "Gausiana", "Tangente Hiperbolica", "Lineal"];
 
     useEffect(() => {
         fillFields();
@@ -74,6 +78,27 @@ const FormConfigurationNetwork = ({inputParameters , monolayer}) => {
         return children;
     };
 
+    const getFieldsNumberNeurons = () => {
+        const count = layerNumbers;
+        const children = [];
+        for (let i = 0; i < count; i++) {
+            children.push(
+                <Col span={4} key={i}>
+                    <Form.Item
+                        name={`layer${i}`}
+                        label={`Capa Oculta ${i}`}
+                        rules={[{ required: true, type: 'number', min: 1, max: 100 }]}
+                    >
+                        <InputNumber placeholder={`Capa ${i}`} />
+                    </Form.Item>
+                </Col>,
+            );
+        }
+        return children;
+    };
+
+    console.log(layerNumbers);
+
     return (
         <>
             <Form
@@ -119,7 +144,7 @@ const FormConfigurationNetwork = ({inputParameters , monolayer}) => {
                 </Row>
                 <h3>Parametros de entrenamiento</h3>
                 <Row gutter={16}>
-                    <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                    <Col xs={24} sm={24} md={12} lg={8} xl={6}>
                         <Form.Item
                             label="Rata de aprendisaje"
                             name="learningRat"
@@ -128,7 +153,7 @@ const FormConfigurationNetwork = ({inputParameters , monolayer}) => {
                             <InputNumber  prefix={<UserOutlined />} />
                         </Form.Item>
                     </Col >
-                    <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                    <Col xs={24} sm={24} md={12} lg={8} xl={6}>
                         <Form.Item
                             label="Numero de Iteraciones"
                             name="numberIterations"
@@ -137,7 +162,7 @@ const FormConfigurationNetwork = ({inputParameters , monolayer}) => {
                             <InputNumber   prefix={<UserOutlined />} />
                         </Form.Item>
                     </Col >
-                    <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                    <Col xs={24} sm={24} md={12} lg={8} xl={6}>
                         <Form.Item
                             label="Error maximo permitido"
                             name="maximumErrorAllowed"
@@ -146,12 +171,68 @@ const FormConfigurationNetwork = ({inputParameters , monolayer}) => {
                             <InputNumber prefix={<UserOutlined />} />
                         </Form.Item>
                     </Col >
+                    <Col xs={24} sm={24} md={12} lg={8} xl={6}>
+                        <Form.Item
+                            label="Numero de capas intermedias"
+                            name="numberIntermediateLayers"
+                            rules={[{ required: true, type: 'number', min: 1, max: 99999 }]}
+                        >
+                            <InputNumber
+                                onChange={(e) => setLayerNumbers(e) }
+                               prefix={<UserOutlined />}
+                            />
+                        </Form.Item>
+                    </Col >
+                </Row>
+                <Row gutter={16}>
+                    <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                        <Form.Item
+                            label="Funcion de activacion"
+                            name="outputActivationFunction"
+                            rules={[{ required: true}]}
+                        >
+                            <Select>
+                                {
+                                    outputsActivationFunctions.map( (a) => (
+                                        <Option value={a} >{a}</Option>
+                                    ))
+                                }
+
+                            </Select>
+                        </Form.Item>
+                    </Col >
                 </Row>
 
+                {
+                     layerNumbers != undefined && layerNumbers > 0 ?
+                        <>
+                            <h3>Configuracion capas intermedias</h3>
+                            <Row gutter={24}>
+                                {getFieldsNumberNeurons()}
+                            </Row>
+                            <Row gutter={16}>
+                                <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+                                    <Form.Item
+                                        label="Funcion de activacion"
+                                        name="intermediaActivationFunction"
+                                        rules={[{ required: true}]}
+                                    >
+                                        <Select>
+                                            {
+                                                intermediaActivationFunctions.map( (a) => (
+                                                    <Option value={a} >{a}</Option>
+                                                ))
+                                            }
+
+                                        </Select>
+                                    </Form.Item>
+                                </Col >
+                            </Row>
+                        </> : <></>
+                }
+
                 <h3>Configuracion de pesos</h3>
-
                 <Row gutter={24}>{inputParameters ? getFields() : <></> }</Row>
-
                 <Button
                     onClick={setRandomWeights}
                 >
