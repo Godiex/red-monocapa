@@ -1,28 +1,66 @@
-import React, {useEffect} from "react";
-import {Button, Col, Form, Row, Input} from "antd";
+import React, {useEffect, useState} from "react";
+import {Button, Col, Form, Row, Input, InputNumber} from "antd";
 import "../register-travel.css";
 import {validateMessages} from "../../../../utils/ValidateMenssageForm";
-import { UserOutlined } from '@ant-design/icons';
+import {FullscreenExitOutlined, FullscreenOutlined, NumberOutlined, UserOutlined} from '@ant-design/icons';
 
 const FormConfigurationNetwork = ({inputParameters}) => {
 
     const [form] = Form.useForm();
+    const onReset = () => form.resetFields();
+    const [expand, setExpand] = useState(false);
 
     useEffect(() => {
         fillFields();
+        getFields();
     }, [inputParameters]);
 
-    const onFinish = () => {
+    const onFinish = (values) => {
+        console.log(values);
 
+        fillWeights(values);
     }
 
     const fillFields = () => {
         form.setFieldsValue({
-            inputs : inputParameters.numberTickets,
-            outputs : inputParameters.numberDesiredOutputs,
+            inputs : inputParameters.numberEntrys,
+            entranceType : inputParameters.entranceType,
             outputsNetwork : inputParameters.numberDesiredOutputs,
             numberPatterns : inputParameters.numberPatterns
         });
+    };
+
+
+
+    const fillWeights = (value) => {
+        debugger
+        for (const property in value) {
+            if(property.includes("weight")){
+                form.setFieldsValue({
+                    [property] : 1
+                })
+            }
+        }
+    };
+
+    const getFields = () => {
+        const count = inputParameters.numberEntrys * inputParameters.numberDesiredOutputs;
+        const children = [];
+
+        for (let i = 0; i < count; i++) {
+            children.push(
+                <Col span={4} key={i}>
+                    <Form.Item
+                        name={`weight${i}`}
+                        label={`Peso ${i}`}
+                        rules={[{ required: true, type: 'number', min: -1, max: 1 }]}
+                    >
+                        <InputNumber placeholder={`Peso ${i}`} />
+                    </Form.Item>
+                </Col>,
+            );
+        }
+        return children;
     };
 
     return (
@@ -30,6 +68,7 @@ const FormConfigurationNetwork = ({inputParameters}) => {
             <Form
                 validateMessages={validateMessages}
                 form={form}
+                onFinish={onFinish}
                 layout="vertical"
                 style={{ height: '100%', width: "100%" }}
             >
@@ -39,15 +78,7 @@ const FormConfigurationNetwork = ({inputParameters}) => {
                             label="Entradas"
                             name="inputs"
                         >
-                            <Input disabled prefix={<UserOutlined />} />
-                        </Form.Item>
-                    </Col >
-                    <Col xs={24} sm={24} md={12} lg={6} xl={6}>
-                        <Form.Item
-                            label="Salidas"
-                            name="outputs"
-                        >
-                            <Input disabled prefix={<UserOutlined />} />
+                            <Input disabled prefix={<FullscreenExitOutlined />} />
                         </Form.Item>
                     </Col >
                     <Col xs={24} sm={24} md={12} lg={6} xl={6}>
@@ -55,48 +86,64 @@ const FormConfigurationNetwork = ({inputParameters}) => {
                             label="Salidas de la red"
                             name="outputsNetwork"
                         >
-                            <Input disabled  prefix={<UserOutlined />} />
+                            <Input disabled  prefix={<FullscreenOutlined />} />
                         </Form.Item>
                     </Col >
                     <Col xs={24} sm={24} md={12} lg={6} xl={6}>
                         <Form.Item
-                            label="Numero de patrones"
+                            label="Numero patrones"
                             name="numberPatterns"
                         >
-                            <Input disabled prefix={<UserOutlined />} />
+                            <Input disabled prefix={<NumberOutlined />} />
+                        </Form.Item>
+                    </Col >
+                    <Col xs={24} sm={24} md={12} lg={6} xl={6}>
+                        <Form.Item
+                            label="Tipo de Entrada"
+                            name="entranceType"
+                        >
+                            <Input disabled prefix={<FullscreenOutlined />} />
                         </Form.Item>
                     </Col >
                 </Row>
+                <h3>Parametros de entrenamiento</h3>
                 <Row gutter={16}>
                     <Col xs={24} sm={24} md={12} lg={8} xl={8}>
                         <Form.Item
                             label="Rata de aprendisaje"
                             name="learning"
+                            rules={[{ required: true, type: 'number', min: -1, max: 1 }]}
                         >
-                            <Input prefix={<UserOutlined />} />
+                            <InputNumber  prefix={<UserOutlined />} />
                         </Form.Item>
                     </Col >
                     <Col xs={24} sm={24} md={12} lg={8} xl={8}>
                         <Form.Item
                             label="Numero de Iteraciones"
                             name="numberIterations"
+                            rules={[{ required: true, type: 'number', min: 1, max: 99999 }]}
                         >
-                            <Input  prefix={<UserOutlined />} />
+                            <InputNumber   prefix={<UserOutlined />} />
                         </Form.Item>
                     </Col >
                     <Col xs={24} sm={24} md={12} lg={8} xl={8}>
                         <Form.Item
-                            label="Error Maestro"
-                            name="masterMistake"
+                            label="Error maximo permitido"
+                            name="maximumErrorAllowed"
+                            rules={[{ required: true, type: 'number', min: 1, max: 100 }]}
                         >
-                            <Input  prefix={<UserOutlined />} />
+                            <InputNumber prefix={<UserOutlined />} />
                         </Form.Item>
                     </Col >
                 </Row>
 
+                <h3>Configuracion de pesos</h3>
+
+                <Row gutter={24}>{inputParameters ? getFields() : <></> }</Row>
+
                 <Row>
                     <Form.Item >
-                        <Button type={"primary"} >
+                        <Button type="primary" htmlType="submit" >
                             Entrenar Red
                         </Button>
                     </Form.Item>

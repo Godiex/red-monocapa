@@ -6,6 +6,7 @@
 .background-container{
     width: 100%;
     display: flex;
+    padding: 30px;
     align-items: stretch;
     flex-wrap: wrap;
     box-sizing: border-box;

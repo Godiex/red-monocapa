@@ -2,11 +2,11 @@
   "menu" : [
     {
       "id" : 1,
-      "name" : "Vivair"
+      "name" : "Perceptron Monocapa"
     },
     {
       "id" : 2,
-      "name" : "Avianca"
+      "name" : "Perceptron Multicapa"
     }
   ]
 }

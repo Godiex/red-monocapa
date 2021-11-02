@@ -1,10 +1,10 @@
 import React from "react";
-import Monolayer from "./components/Monolayer";
+import MonolayerComponent from "./components/MonolayerComponent";
 
 const RegisterTravelComponent = () => {
     return (
         <>
-            <Monolayer />
+            <MonolayerComponent />
         </>
     );
 }

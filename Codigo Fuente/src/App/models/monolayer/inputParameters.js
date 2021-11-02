@@ -4,10 +4,12 @@ export default class InputParameters {
         this.numberPatterns = this.getNumberPatterns(textFile);
         this.numberDesiredOutputs = this.getNumberDesiredOutputs(textFile);
         this.numberNetworkOutputs = this.numberDesiredOutputs;
-        this.numberTickets = this.getNumberTickets(textFile);
+        this.numberEntrys = this.getNumberTickets(textFile);
         this.inputs = this.getInputs(textFile);
         this.outputs = this.getOutputs(textFile);
         this.dataFile = this.getDataFile(textFile);
+        this.entranceType = this.getEntranceType(textFile);
+        this.isBinary = this.getIfIsBinary(textFile);
     }
 
     getNumberDesiredOutputs(textFile){
@@ -57,6 +59,16 @@ export default class InputParameters {
             dataFile.push(data);
         });
         return dataFile;
+    }
+
+    getEntranceType(textFile) {
+        let isBinary = this.getIfIsBinary(textFile);
+        return isBinary ? "Binario" : "Bipolar";
+    }
+
+    getIfIsBinary(textFile) {
+        let dataFile = this.getDataFile(textFile);
+        return dataFile.some(data => data.inputs.find(n => n == "0"));
     }
 
 }
